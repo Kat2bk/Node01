@@ -80,7 +80,33 @@ server.get('/users', async (req, res) => {
     })
 
 //update 
+server.put('/users/:id', async (req, res) => {
+    const {id} = req.params;
+    const {name, bio} = req.body;
 
+    try {
+        if (!id) {
+            return res.status(404).json({
+                message: "User not found"
+            })
+        } else if (!name || !bio) {
+            return res.status(400).json({
+                message: "please fill out all required fields"
+            })
+        } else {
+            await database.update(id, {name, bio})
+            const updatedUser = await database.findById(id)
+            return res.status(200).json(updatedUser)
+        }
+
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Uh oh, user could not be updated"
+        })
+    }
+
+})
 
 // delete
 
