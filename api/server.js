@@ -31,9 +31,53 @@ server.get('/users', async (req, res) => {
 
 
 // find by id
+    server.get('/users/:id', async (req, res) => {
+        try {
+            const user = await database.findById(req.params.id);
+            if (user) {
+                res.status(200).json(user)
+            } else {
+                res.status(404).json({
+                    message: "User not found"
+                })
+                
+            }
+        } catch (error) {
+            res.status(500).json({
+                error: "Uh oh, something went wrong"
+            })
+        }
+
+    })
+
+
 
 //insert (create user)
+    server.post('/users', async (req, res) => {
+        const name = req.body.name;
+        const bio = req.body.bio;
 
+        try {
+            if (name && bio) {
+                const newUser = await database.insert({
+                   name,
+                   bio
+                })
+                res.status(201).json(newUser)
+            } else if (!req.body.name && !req.body.bio) {
+                res.status(400).json({
+                    message: "please fill out all required fields"
+                })
+            }
+
+        } catch (error) {
+            res.status(500).json({
+                error: "Uh oh, something happened"
+            })
+        }
+
+
+    })
 
 //update 
 
