@@ -109,6 +109,25 @@ server.put('/users/:id', async (req, res) => {
 })
 
 // delete
+server.delete('/users/:id', async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        if (!id) {
+            return res.status(404).json({
+                message: "user not found"
+            })
+        } else {
+            await database.remove(id);
+            return res.status(204).json(id)
+        }
+    } catch (error) {
+        res.status(500).json({
+            error: "Uh oh, user could not be deleted"
+        })
+    }
+
+})
 
 
 
