@@ -11,6 +11,22 @@ server.get('/', (req, res) => {
 })
 
 // find
+server.get('/users', async (req, res) => {
+    try {
+        const users = await database.find();
+        if (users) {
+            res.status(200).json(users);
+        } else {
+            res.status(404).json({
+                message: "Unable to get users"
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            error: "Uh oh, something happened, try again"
+        })
+    }
+})
 
 
 
